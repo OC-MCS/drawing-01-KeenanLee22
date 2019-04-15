@@ -1,5 +1,5 @@
 //================================================
-// YOUR NAME GOES HERE <-----------------  
+// Keenan Lee
 //================================================
 #include <iostream>
 #include <fstream>
@@ -29,6 +29,19 @@ int main()
 	DrawingUI   drawingUI(Vector2f(200, 50));
 	
 	// ********* Add code here to make the managers read from shapes file (if the file exists)
+	
+	fstream binFile;
+	binFile.open("shapes.bin", ios::in | ios::binary);
+	if (binFile)
+	{
+		settingsMgr.load(binFile);
+		shapeMgr.load(binFile);
+	}
+	else
+	{
+		cout << "Error loading file.\n";
+	}
+	binFile.close();
 
 	while (window.isOpen()) 
 	{
@@ -39,6 +52,18 @@ int main()
 			{
 				window.close();
 				// ****** Add code here to write all data to shapes file
+
+				binFile.open("shapes.bin", ios::out | ios::binary);
+				if (binFile)
+				{
+					settingsMgr.save(binFile);
+					shapeMgr.save(binFile);
+				}
+				else
+				{
+					cout << "Error saving file.\n";
+				}
+				binFile.close(); 
 			}
 			else if (event.type == Event::MouseButtonReleased)
 			{
@@ -73,6 +98,5 @@ int main()
 
 		window.display();
 	} // end body of animation loop
-
 	return 0;
 }
